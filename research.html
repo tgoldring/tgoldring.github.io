@@ -1,0 +1,88 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Professional website">
+  <meta name="author" content="Thomas Goldring">
+
+  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-yrfSO0DBjS56u5M+SjWTyAHujrkiYVtRYh2dtB3yLQtUz3bodOeialO59u5lUCFF" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <title>Thomas Goldring</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">  
+      <a class="navbar-brand" href="index.html">Thomas Goldring</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="#">Research</a>
+          <a class="nav-item nav-link" href="projects.html">Projects</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container content">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+   	    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Research</li>
+      </ol>
+    </nav>
+
+    <h2>Research</h2>
+    <h4>Testing for changes in the SES-mortality gradient when the distribution of education changes too</h4>
+    <h4><small class="text-muted">with <a href="http://www.fabianlange.ca/">Fabian Lange</a> and <a href="https://www.lehigh.edu/~ser315/">Seth Richards-Shubik</a></small></h4>
+    <h4><small class="text-muted"><a href="https://doi.org/10.1016/j.jhealeco.2015.12.002">Journal of Health Economics</a>, 2016</small></h4>
+    <button type="button" class="btn btn-outline-info" id="hideshow">View Abstract</button>
+    <a class="btn btn-outline-warning" href="research/mort_educ_test.pdf" role="button" >Open Paper</a>
+    <a class="btn btn-outline-danger" href="research/jhe_mort_educ_test.zip" role="button" >Download Data</a>
+    <div class="card border-info mb-3" id="abstract1" style="display: none;">
+      <div class="card-body">
+        <p class="card-text">We develop a flexible test for changes in the SES-mortality gradient that accounts for changes in the distribution of education, the most commonly used marker of SES. We implement the test for the period between 1984 and 2006 in the United States using microdata from the Census and other surveys linked to death records. Using our flexible test, we find that the evidence for a change in the SES-mortality gradient is not as strong as previous research has suggested. Our results indicate that the gradient increased for females during this time period, but we cannot rule out that the gradient among males has not changed. Informally, the results suggest that the changes for females are mainly driven by the bottom of the education distribution.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer bg-success">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6">
+          <a class="text-white icon" href="https:/www.twitter.com/thomasgoldring" data-toggle="tooltip" title="Twitter"><span class="fab fa-twitter fa-lg"></span></a>
+          <a class="text-white icon" href="https:/www.github.com/tgoldring" data-toggle="tooltip" title="Github"><i class="fab fa-github fa-lg"></i></a>
+        </div>
+        <div class="col-lg-6 text-right">
+          <a class="text-white" href="about.html">About Site</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/01189a8275.js" crossorigin="anonymous"></script>
+
+  <script>
+    jQuery(document).ready(function(){
+      jQuery('#hideshow').on('click', function(event) {        
+        jQuery('#abstract1').toggle('show');
+      });
+    });
+
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+    });
+  </script>
+</body>
+
+</html>
