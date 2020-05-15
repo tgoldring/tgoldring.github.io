@@ -91,6 +91,14 @@ h2 {
   line-height: 60px;
 }
 
-pre > code {
-    font-family: 'Roboto Mono', 'Courier', monospace;
+code {
+  font-family: 'Roboto Mono', 'Courier', monospace;
+}
+
+.stata_command {
+  color: #008;
+}
+
+.stata_options {
+  color: #606;
 }

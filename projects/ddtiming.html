@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/styles.css">
-  <link rel="stylesheet" href="../js/styles/monokai-sublime.css">
+  <link rel="stylesheet" href="../js/styles/googlecode.css">
 
   <title>Thomas Goldring</title>
 
@@ -66,18 +66,18 @@
 
     <h2>ddtiming</h2>
     <h4>Introduction</h4>
-    <p>ddtiming is a Stata command that implements a decomposition of a difference-in-differences (DD) estimator with variation in treatment timing, based on <a href="https://www.nber.org/papers/w25018">Goodman-Bacon (2018)</a>. The two-way fixed effects DD model is a weighted average of all possible two-group/two period DD estimators. The command generates a scatterplot of 2x2 DD estimates and their associated weights.</p>
+    <p><code class="stata stata_command">ddtiming</code> is a Stata command that implements a decomposition of a difference-in-differences (DD) estimator with variation in treatment timing, based on <a href="https://www.nber.org/papers/w25018">Goodman-Bacon (2018)</a>. The two-way fixed effects DD model is a weighted average of all possible two-group/two period DD estimators. The command generates a scatterplot of 2x2 DD estimates and their associated weights.</p>
 
     <h4>R Users</h4>
     <p>An R package called <a href="https://cran.r-project.org/web/packages/bacondecomp/index.html">bacondecomp</a> is available to perform the decomposition.</p>
 
     <h4>Background and a Note of Caution</h4>
     <p>I decided to program a Stata command during my postdoc. I felt that my programming skills were finally advanced enough to pull it off and I wanted to make a small contribution to the Stata user community. I read Andrew's paper when it was first published at the NBER and, like all who read it, I thought it was a brilliant, insightful paper. Unable to locate a command for the main result on Andrew's website, I resolved to program it myself.</p>
-    <p>Unbeknown to me, Andrew had been discussing the creation of a Stata command with Austin Nichols. After I released ddtiming, Austin worked on a new command that incorporates <a href="https://cdn.vanderbilt.edu/vu-my/wp-content/uploads/sites/2318/2019/07/29170757/ddtiming_7_29_2019.pdf">revisions to Andrew's paper</a>, most notably to permit the inclusion of covariates in the DD model. That command is <a href="https://ideas.repec.org/c/boc/bocode/s458676.html">bacondecomp</a>. Although bacondecomp currently incorporates some of ddtiming's code, <a href="https://ideas.repec.org/c/boc/bocode/s458676.html">bacondecomp</a> should be thought of as superseding ddtiming for Stata users.</p>
-    <p>Despite effectively becoming obsolete, I will continue to host ddtiming on my site. I recommend, however, that users consider using <a href="https://ideas.repec.org/c/boc/bocode/s458676.html">bacondecomp</a> rather than ddtiming.</p>
+    <p>Unbeknown to me, Andrew had been discussing the creation of a Stata command with Austin Nichols. After I released <code class="stata stata_command">ddtiming</code>, Austin worked on a new command that incorporates <a href="https://cdn.vanderbilt.edu/vu-my/wp-content/uploads/sites/2318/2019/07/29170757/ddtiming_7_29_2019.pdf">revisions to Andrew's paper</a>, most notably to permit the inclusion of covariates in the DD model. That command is <a href="https://ideas.repec.org/c/boc/bocode/s458676.html">bacondecomp</a>. Although <code class="stata stata_command">bacondecomp</code> currently incorporates some of <code class="stata stata_command">ddtiming</code>'s code, <code class="stata stata_command">bacondecomp</code> should be thought of as superseding <code class="stata stata_command">ddtiming</code> for Stata users.</p>
+    <p>Despite effectively becoming obsolete, I will continue to host <code class="stata stata_command">ddtiming</code> on my site. I recommend, however, that users consider using <a href="https://ideas.repec.org/c/boc/bocode/s458676.html">bacondecomp</a> rather than <code class="stata stata_command">ddtiming</code>.</p>
 
     <h4>Installation</h4>
-    <p>To install the ddtiming command in Stata, either type into the command window</p>
+    <p>To install the <code class="stata stata_command">ddtiming</code> command in Stata, either type into the command window</p>
     <pre><code class="stata">
       net describe ddtiming, from(https://tgoldring.com/code/)
       net install ddtiming
@@ -88,7 +88,7 @@
     </code></pre>
 
     <h4>Example &ndash; No-Fault Divorce Laws</h4>
-    <p>ddtiming can replicate the example in Goodman-Bacon (2018). Download and load a dataset with the timing of no-fault divorce laws and female suicide rates (Stevenson and Wolfers 2006):</p>
+    <p><code class="stata stata_command">ddtiming</code> can replicate the example in Goodman-Bacon (2018). Download and load a dataset with the timing of no-fault divorce laws and female suicide rates (Stevenson and Wolfers 2006):</p>
     <pre><code class="stata">
       net get ddtiming
       use nofault_divorce.dta
@@ -117,7 +117,7 @@
       ylabel(-30(10)30) legend(order(3 4 1 2)) savegraph(nfd.jpg) ///
       savedata(nfd) replace
     </code></pre>
-    <p>This command demonstrates the use of <code class="stata">ddtiming</code>'s options (<code class="stata">ddline</code>, <code class="stata">savegraph</code>, <code class="stata">savedata</code>) and twoway options (<code class="stata">ylabel</code>, <code class="stata">legend</code>). For descriptions of all options and additional help, type</p>
+    <p>This command demonstrates the use of <code class="stata stata_command">ddtiming</code>'s options (<code class="stata stata_options">ddline</code>, <code class="stata stata_options">savegraph</code>, <code class="stata stata_options">savedata</code>) and twoway options (<code class="stata stata_options">ylabel</code>, <code class="stata stata_options">legend</code>). For descriptions of all options and additional help, type</p>
     <pre><code class="stata">
       help ddtiming
     </code></pre>
