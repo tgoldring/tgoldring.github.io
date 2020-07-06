@@ -1,0 +1,190 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Professional website">
+  <meta name="author" content="Thomas Goldring">
+
+  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-yrfSO0DBjS56u5M+SjWTyAHujrkiYVtRYh2dtB3yLQtUz3bodOeialO59u5lUCFF" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../js/styles/googlecode.css">
+
+  <title>Thomas Goldring</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-87628660-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-87628660-2');
+  </script>
+</head>
+
+<body>
+  <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="../index.html">Thomas Goldring</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="../research.html">Research</a>
+          <a class="nav-item nav-link" href="../projects.html">Projects</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container content">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+   	    <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="../projects.html">Projects</a></li>
+        <li class="breadcrumb-item active" aria-current="page">School Finance</li>
+      </ol>
+    </nav>
+
+    <h2>School Finance</h2>
+    <h4>Description</h4>
+    <p>This graph plots total K-12 school revenue per pupil by state in constant 2019 dollars.</p>
+
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <select id="selectButton"></select>
+    <div id="school_rev"></div>
+    <script>
+
+    // set the dimensions and margins of the graph
+    var margin = {top: 10, right: 30, bottom: 30, left: 60},
+      width = 960 - margin.left - margin.right,
+      height = 600 - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    var svg = d3.select("#school_rev")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+    //Read the data
+    d3.csv("https://raw.githubusercontent.com/tgoldring/tgoldring.github.io/master/data/total_rev.csv", function(data) {
+
+    // List of groups (here I have one group per column)
+    var allGroup = d3.map(data, function(d){return(d.state)}).keys()
+
+    // add the options to the button
+    d3.select("#selectButton")
+      .selectAll('myOptions')
+      .data(allGroup)
+      .enter()
+      .append('option')
+      .text(function (d) { return d; }) // text showed in the menu
+      .attr("value", function (d) { return d; }) // corresponding value returned by the button
+
+    // A color scale: one color for each group
+    var myColor = d3.scaleOrdinal()
+      .domain(allGroup)
+      .range(d3.schemeSet2);
+
+    // Add x-axis
+    var x = d3.scaleLinear()
+      .domain(d3.extent(data, function(d) { return d.year; }))
+      .range([ 0, width ]);
+    svg.append("g")
+      .style("font", "16px Roboto")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(14).tickFormat(d3.format("d")));
+
+    // Add y-axis
+    var y = d3.scaleLinear()
+      .domain([6000, d3.max(data, function(d) { return +d.total_rev; })])
+      .range([ height, 0 ]);
+    svg.append("g")
+      .style("font", "16px Roboto")
+      .call(d3.axisLeft(y));
+
+    // Initialize line with first group of the list
+    var line = svg
+      .append('g')
+      .append("path")
+        .datum(data.filter(function(d){return d.state==allGroup[0]}))
+        .attr("d", d3.line()
+          .defined(function(d) { return d.total_rev != 0; })
+          .x(function(d) { return x(d.year) })
+          .y(function(d) { return y(+d.total_rev) })
+        )
+        .attr("stroke", function(d){ return myColor("valueA") })
+        .style("stroke-width", 4)
+        .style("fill", "none")
+
+    // A function that update the chart
+    function update(selectedGroup) {
+
+      // Create new data with the selection?
+      var dataFilter = data.filter(function(d){return d.state==selectedGroup})
+
+      // Give these new data to update line
+      line
+          .datum(dataFilter)
+          .transition()
+          .duration(1000)
+          .attr("d", d3.line()
+            .defined(function(d) { return d.total_rev != 0; })
+            .x(function(d) { return x(d.year) })
+            .y(function(d) { return y(+d.total_rev) })
+          )
+          .attr("stroke", function(d){ return myColor(selectedGroup) })
+    }
+
+    // When the button is changed, run the updateChart function
+    d3.select("#selectButton").on("change", function(d) {
+        // recover the option that has been chosen
+        var selectedOption = d3.select(this).property("value")
+        // run the updateChart function with this selected option
+        update(selectedOption)
+    })
+
+    })
+
+    </script>
+
+    <h4>Data Sources</h4>
+    <p>The data source for school revenue and pupil head count is the <a href="https://nces.ed.gov/ccd/">Common Core of Data</a> from the National Center for Education Statistics. The data are adjusted for inflation using a price index for <a href="https://fred.stlouisfed.org/series/SLEXPND">state and local government expenditures</a> from the U.S. Bureau of Economic Analysis, obtained from FRED.</p>
+  </div>
+
+  <footer class="footer bg-success">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <a class="text-white icon" href="mailto:tgoldring@gsu.edu" data-toggle="tooltip" title="Email"><span class="fas fa-envelope fa-lg"></span></a>
+          <a class="text-white icon" href="https://www.twitter.com/thomasgoldring" data-toggle="tooltip" title="Twitter"><span class="fab fa-twitter fa-lg"></span></a>
+          <a class="text-white icon" href="https://www.github.com/tgoldring" data-toggle="tooltip" title="Github"><i class="fab fa-github fa-lg"></i></a>
+        </div>
+        <div class="col text-right">
+          <a class="text-white" href="../about.html">About Site</a>
+        </div>
+      </div>
+    </div>
+
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/01189a8275.js" crossorigin="anonymous"></script>
+
+  <script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+    });
+  </script>
+</body>
+
+</html>
