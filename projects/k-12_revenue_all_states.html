@@ -1,0 +1,170 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Professional website">
+  <meta name="author" content="Thomas Goldring">
+
+  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-yrfSO0DBjS56u5M+SjWTyAHujrkiYVtRYh2dtB3yLQtUz3bodOeialO59u5lUCFF" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../js/styles/googlecode.css">
+
+  <title>Thomas Goldring</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-87628660-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-87628660-2');
+  </script>
+</head>
+
+<body>
+  <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand" href="../index.html">Thomas Goldring</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="../research.html">Research</a>
+          <a class="nav-item nav-link" href="../projects.html">Projects</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container content">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+   	    <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="../projects.html">Projects</a></li>
+        <li class="breadcrumb-item active" aria-current="page">K-12 Revenue for All States</li>
+      </ol>
+    </nav>
+
+    <h2>K-12 Revenue for All States</h2>
+    <h4>Description</h4>
+    <p>The graphs show total K-12 revenue per pupil in constant 2019 dollars.</p>
+
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <div id="school_rev_all_states"></div>
+    <script>
+
+	// set the dimensions and margins of the graph
+	var margin = {top: 30, right: 0, bottom: 30, left: 50},
+    	width = 210 - margin.left - margin.right,
+    	height = 210 - margin.top - margin.bottom;
+
+	//Read the data
+	d3.csv("https://raw.githubusercontent.com/tgoldring/tgoldring.github.io/master/data/total_rev.csv", function(data) {
+
+		// group the data: I want to draw one line per group
+  		var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
+    		.key(function(d) { return d.state;})
+    		.entries(data);
+
+  		// What is the list of groups?
+  		allKeys = sumstat.map(function(d){return d.key})
+
+  		// Add an svg element for each group. The will be one beside each other and will go on the next row when no more room available
+  		var svg = d3.select("#school_rev_all_states")
+    		.selectAll("uniqueChart")
+    		.data(sumstat)
+    		.enter()
+    		.append("svg")
+      			.attr("width", width + margin.left + margin.right)
+      			.attr("height", height + margin.top + margin.bottom)
+    		.append("g")
+      			.attr("transform",
+            		  "translate(" + margin.left + "," + margin.top + ")");
+
+  		// Add X axis
+  		var x = d3.scaleLinear()
+    		.domain(d3.extent(data, function(d) { return d.year; }))
+    		.range([ 0, width ]);
+  		svg
+    		.append("g")
+    		.style("font", "12px Roboto")
+    		.attr("transform", "translate(0," + height + ")")
+    		.call(d3.axisBottom(x).ticks(5).tickFormat(d3.format("d")));
+
+  		//Add Y axis
+  		var y = d3.scaleLinear()
+    		.domain([0, d3.max(data, function(d) { return +d.total_rev; })])
+    		.range([ height, 0 ]);
+  		svg.append("g")
+  		    .style("font", "12px Roboto")
+    		.call(d3.axisLeft(y).ticks(3));
+
+  		// color palette
+  		var color = d3.scaleOrdinal()
+    		.domain(allKeys)
+    		.range(['#18BC9C','#2C3E50','#F39C12','#E74C3C','#3498DB'])
+
+  		// Draw the line
+  		svg
+    		.append("path")
+      			.attr("fill", "none")
+      			.attr("stroke", function(d){ return color(d.key) })
+      			.attr("stroke-width", 1.9)
+      			.attr("d", function(d){
+       		 		return d3.line()
+       		 			.defined(function(d) { return d.total_rev != 0; })
+          				.x(function(d) { return x(d.year); })
+          				.y(function(d) { return y(+d.total_rev); })
+          				(d.values)
+      			})
+
+  		// Add titles
+  		svg
+    		.append("text")
+    		.attr("text-anchor", "start")
+    		.attr("y", -5)
+    		.attr("x", 0)
+    		.text(function(d){ return(d.key)})
+    		.style("fill", function(d){ return color(d.key) })
+
+	})
+	</script>
+
+    <h4>Data Sources</h4>
+    <p>The data source for school revenue and pupil head count is the <a href="https://nces.ed.gov/ccd/">Common Core of Data</a> from the National Center for Education Statistics. The data are adjusted for inflation using a price index for <a href="https://fred.stlouisfed.org/series/SLEXPND">state and local government expenditures</a> from the U.S. Bureau of Economic Analysis, obtained from FRED.</p>
+  </div>
+
+  <footer class="footer bg-success">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <a class="text-white icon" href="mailto:tgoldring@gsu.edu" data-toggle="tooltip" title="Email"><span class="fas fa-envelope fa-lg"></span></a>
+          <a class="text-white icon" href="https://www.twitter.com/thomasgoldring" data-toggle="tooltip" title="Twitter"><span class="fab fa-twitter fa-lg"></span></a>
+          <a class="text-white icon" href="https://www.github.com/tgoldring" data-toggle="tooltip" title="Github"><i class="fab fa-github fa-lg"></i></a>
+        </div>
+        <div class="col text-right">
+          <a class="text-white" href="../about.html">About Site</a>
+        </div>
+      </div>
+    </div>
+
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/01189a8275.js" crossorigin="anonymous"></script>
+
+  <script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();   
+    });
+  </script>
+</body>
+
+</html>
