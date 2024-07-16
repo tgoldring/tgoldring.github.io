@@ -1,0 +1,106 @@
+.roboto-medium {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.roboto-bold {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  color: #555555;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+hr {
+  margin: 15px 0 25px 0;
+}
+
+@media (max-width: 900px) {
+  .container {
+    max-width: min(100%, 750px);
+    padding: 12px;
+  }
+}
+
+.container p {
+  line-height: 1.3;
+  font-weight: 400;
+  font-size: 16px;
+  margin: 10px 0 12px 0;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  color:#0039a6;
+}
+
+h2 {
+  font-size: 22px;
+  margin-top: 25px;
+}
+
+h3 {
+  font-size: 17px;
+}
+
+a:link, a:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #0039a6;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: inherit;
+  padding: 10px 0px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.header nav {
+  display: flex;
+}
+
+.header nav a:link {
+  color: inherit;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 16px;
+}
+
+.header nav a:visited {
+  color: inherit;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 16px;
+}
+
+.header nav a:hover {
+  color: #0039a6;
+}
